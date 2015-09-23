@@ -1,24 +1,28 @@
 import os
 import SocketServer
-port = 8888
-host = '0.0.0.0'
 
-class MyTCPServer(SocketServer.ThreadingTCPServer):
+port 	= 8888
+host 	= '0.0.0.0'
+logfile = 'log.txt'
+
+print 'listening on port %s and logging to %s' % (port, logfile)
+
+class tcpServer(SocketServer.ThreadingTCPServer) :
 	allow_reuse_address = True
 
-class MyTCPServerHandler(SocketServer.BaseRequestHandler):
+class tcpServerHandler(SocketServer.BaseRequestHandler) :
 	def handle(self):
 		try:
-			fname = open('./data.xml', 'wb')
+			fname = open( logfile, 'wb' )
 			while True:
-				strng = self.request.recv(1024).strip()
-				if strng:
-					fname.write(strng)
+				inputString = self.request.recv(1024).strip()
+				if inputString:
+					fname.write( inputString )
 				else:
 					fname.close()
 					break
 		except Exception, e:
 			print "Exception wile receiving message: ", e
 
-server = MyTCPServer((host, port), MyTCPServerHandler)
+server = tcpServer( (host, port), tcpServerHandler )
 server.serve_forever()
