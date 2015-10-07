@@ -1,28 +1,30 @@
-import os
-import SocketServer
+#!/usr/bin/env python
 
-port 	= 8888
-host 	= '0.0.0.0'
+import SocketServer
+import logging
+
+host    = '0.0.0.0'
+port    = 8889
 logfile = 'log.txt'
 
-print 'listening on port %s and logging to %s' % (port, logfile)
+logging.basicConfig(level=logging.INFO,
+    filename=logfile,
+    format='%(asctime)s %(message)s',
+    filemode='a')
 
-class tcpServer(SocketServer.ThreadingTCPServer) :
-	allow_reuse_address = True
+class tcpServerHandler(SocketServer.BaseRequestHandler):
+ 
+    def handle(self):
+        data = self.client_address[0] + ' '
+        data+= self.request.recv(1024).strip()
+        logging.info( str(data) )
 
-class tcpServerHandler(SocketServer.BaseRequestHandler) :
-	def handle(self):
-		try:
-			fname = open( logfile, 'wb' )
-			while True:
-				inputString = self.request.recv(1024).strip()
-				if inputString:
-					fname.write( inputString )
-				else:
-					fname.close()
-					break
-		except Exception, e:
-			print "Exception wile receiving message: ", e
+if __name__ == "__main__":
+    try:
+        server = SocketServer.TCPServer((host,port), tcpServerHandler)
+        server.serve_forever(poll_interval=0.5)
 
-server = tcpServer( (host, port), tcpServerHandler )
-server.serve_forever()
+    except (IOError, SystemExit):
+        raise
+    except KeyboardInterrupt:
+        print ("Crtl+C Pressed. Shutting down.")

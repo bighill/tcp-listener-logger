@@ -7,4 +7,3 @@ very simple.  uses python 2.
 real logging
 * data
 * date
-* local & remote ip address
