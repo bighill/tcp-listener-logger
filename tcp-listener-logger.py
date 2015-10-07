@@ -4,13 +4,16 @@ import SocketServer
 import logging
 
 host    = '0.0.0.0'
-port    = 8889
+port    = 8888
 logfile = 'log.txt'
 
 logging.basicConfig(level=logging.INFO,
     filename=logfile,
     format='%(asctime)s %(message)s',
     filemode='a')
+
+print "tcp listener/logger."
+print "listening on %s:%s" % ( host, port )
 
 class tcpServerHandler(SocketServer.BaseRequestHandler):
  
