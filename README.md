@@ -1,12 +1,20 @@
 # tcp-listener-logger #
 
-very simple.  uses python 2.
+Very simple tool to listen on a TCP port and log incoming messagas.
+
+## requirements ##
+
+python 2.x
 
 ## usage ##
 
-`python tcp-listener-logger.py`
+1. Start the listener at a command line terminal:
+* `cd tcp-listener-logger`
+* `python tcp-listener-logger.py`
 
-then point whatever application at that host:port
+2a. Configure an application to send data to the localhost on port 8888
 
-or test with nc:
+2b. Or test locally with `nc`. In another terminal, use something like this:
 `echo 'important message' | nc localhost 8888`
+
+3. Results are logged in log.txt: `tail -f log.txt`

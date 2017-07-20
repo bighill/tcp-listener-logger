@@ -1,22 +1,35 @@
 #!/usr/bin/env python
 
+'''
+tcp-listener-logger
+'''
+
 import SocketServer
 import logging
 
-host    = '0.0.0.0'
-port    = 8888
-logfile = 'log.txt'
+#
+# configuration variables
+#
+host        = '0.0.0.0'
+port        = 8888
+logFile     = 'log.txt'
+logFormat   = '%(asctime)s %(message)s'
 
-logging.basicConfig(level=logging.INFO,
-    filename=logfile,
-    format='%(asctime)s %(message)s',
-    filemode='a')
+#
+# console message
+#
+print ""
+print "tcp-listener-logger is listening on %s:%s" % ( host, port )
+print "Results will be logged to %s" % logFile
 
-print "tcp listener/logger."
-print "listening on %s:%s" % ( host, port )
+#
+# all of the business logic happens below
+#
+
+logging.basicConfig(level=logging.INFO, filename=logFile, format=logFormat, filemode='a')
 
 class tcpServerHandler(SocketServer.BaseRequestHandler):
- 
+
     def handle(self):
         data = self.client_address[0] + ' '
         data+= self.request.recv(1024).strip()
